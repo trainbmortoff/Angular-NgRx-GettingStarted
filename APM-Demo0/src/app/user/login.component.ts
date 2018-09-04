@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -12,11 +12,12 @@ import * as fromRoot from '../state/app.state';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   pageTitle = 'Log In';
   errorMessage: string;
 
   maskUserName: boolean;
+  componentActive = true;
 
   constructor(private store: Store<fromRoot.State>,
     private authService: AuthService,
@@ -36,6 +37,10 @@ export class LoginComponent implements OnInit {
 
   checkChanged(value: boolean): void {
     this.store.dispatch(new usertActions.ToggleMaskUserName(value));
+  }
+
+  ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   login(loginForm: NgForm): void {
